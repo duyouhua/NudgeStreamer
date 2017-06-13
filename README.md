@@ -1,5 +1,4 @@
 # 桌面推流器
-Homepage:https://gitdojo.gz.cvte.cn/liyongzhao/NudgeStreamer
 
 ## 项目简单介绍
 1. 实现2个显示器的桌面数据采集（扩展屏），采集后的格式为YUV420P
