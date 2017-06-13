@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Streamer</class>
+ <widget class="QMainWindow" name="Streamer">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1370</width>
+    <height>795</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Streamer</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <widget class="QLabel" name="NetwrokLabel">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>81</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>13</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>网络质量</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="MinLabel">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>70</y>
+      <width>61</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>11</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>最短时间</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="MaxLabel">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>120</y>
+      <width>61</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>11</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>最长时间</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="DelayLabel">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>230</y>
+      <width>51</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>11</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>  延时</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="MinValue">
+    <property name="geometry">
+     <rect>
+      <x>90</x>
+      <y>80</y>
+      <width>101</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>11</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>0 ms</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="MaxValue">
+    <property name="geometry">
+     <rect>
+      <x>90</x>
+      <y>130</y>
+      <width>101</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>11</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>0 ms</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="DelayValue">
+    <property name="geometry">
+     <rect>
+      <x>90</x>
+      <y>240</y>
+      <width>101</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>11</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>0 ms</string>
+    </property>
+   </widget>
+   <widget class="Line" name="VerticalLine">
+    <property name="geometry">
+     <rect>
+      <x>190</x>
+      <y>0</y>
+      <width>20</width>
+      <height>771</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="StartButton">
+    <property name="geometry">
+     <rect>
+      <x>480</x>
+      <y>680</y>
+      <width>161</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>开始推流</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="StopButton">
+    <property name="geometry">
+     <rect>
+      <x>960</x>
+      <y>680</y>
+      <width>161</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>停止推流</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="JitterLabel">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>280</y>
+      <width>51</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>11</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>  抖动</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="JitterValue">
+    <property name="geometry">
+     <rect>
+      <x>90</x>
+      <y>290</y>
+      <width>101</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>11</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>0 to 0 ms</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="LossLabel">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>180</y>
+      <width>51</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>11</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>丢包率</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="LossValue">
+    <property name="geometry">
+     <rect>
+      <x>90</x>
+      <y>190</y>
+      <width>101</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>11</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>0 %</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="VideoDisplay" native="true">
+    <property name="geometry">
+     <rect>
+      <x>230</x>
+      <y>50</y>
+      <width>1101</width>
+      <height>621</height>
+     </rect>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1370</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="StartUpMenu">
+    <property name="title">
+     <string>开始</string>
+    </property>
+    <addaction name="StartPushAction"/>
+    <addaction name="StopPushAction"/>
+    <addaction name="FileOutAction"/>
+    <addaction name="QuitAction"/>
+   </widget>
+   <widget class="QMenu" name="InterceptScreenMenu">
+    <property name="title">
+     <string>抓屏</string>
+    </property>
+    <addaction name="GdiGrabAction"/>
+   </widget>
+   <widget class="QMenu" name="NetworkQualityMenu">
+    <property name="title">
+     <string>网络质量</string>
+    </property>
+    <addaction name="TcpingAction"/>
+   </widget>
+   <widget class="QMenu" name="VideoEncodeMenu">
+    <property name="title">
+     <string>视频编码</string>
+    </property>
+    <addaction name="AvEncodeAction"/>
+   </widget>
+   <widget class="QMenu" name="PushFlowMenu">
+    <property name="title">
+     <string>视频推流</string>
+    </property>
+    <addaction name="RtmpPushAction"/>
+   </widget>
+   <widget class="QMenu" name="HelpMenu">
+    <property name="title">
+     <string>帮助</string>
+    </property>
+    <addaction name="UsageAction"/>
+    <addaction name="AboutAction"/>
+   </widget>
+   <widget class="QMenu" name="VideoDisplayMenu">
+    <property name="title">
+     <string>视频播放</string>
+    </property>
+    <addaction name="PicSendUIAction"/>
+    <addaction name="SDLAction"/>
+   </widget>
+   <addaction name="StartUpMenu"/>
+   <addaction name="InterceptScreenMenu"/>
+   <addaction name="NetworkQualityMenu"/>
+   <addaction name="VideoDisplayMenu"/>
+   <addaction name="VideoEncodeMenu"/>
+   <addaction name="PushFlowMenu"/>
+   <addaction name="HelpMenu"/>
+  </widget>
+  <action name="StartPushAction">
+   <property name="text">
+    <string>开始推流</string>
+   </property>
+  </action>
+  <action name="StopPushAction">
+   <property name="text">
+    <string>停止推流</string>
+   </property>
+  </action>
+  <action name="FileOutAction">
+   <property name="text">
+    <string>生成本地文件</string>
+   </property>
+  </action>
+  <action name="QuitAction">
+   <property name="text">
+    <string>退出</string>
+   </property>
+  </action>
+  <action name="UsageAction">
+   <property name="text">
+    <string>软件用法</string>
+   </property>
+  </action>
+  <action name="AboutAction">
+   <property name="text">
+    <string>软件相关</string>
+   </property>
+  </action>
+  <action name="GdiGrabAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Gdi抓屏</string>
+   </property>
+  </action>
+  <action name="TcpingAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Tcping</string>
+   </property>
+  </action>
+  <action name="PicSendUIAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>PicSendUI</string>
+   </property>
+  </action>
+  <action name="SDLAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>SDL</string>
+   </property>
+  </action>
+  <action name="AvEncodeAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>AvEncode</string>
+   </property>
+  </action>
+  <action name="RtmpPushAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>RtmpPush</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>
