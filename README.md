@@ -29,25 +29,25 @@ Homepage:https://github.com/Eric7Coding/NudgeStreamer
 ### English
 
 ## 序列图 Sequence Diagram
-![Sequence Diagram](https://raw.githubusercontent.com/Eric7Coding/NudgeStreamer/master/NudgeStreamer_Sequence_Diagram.png)
+![Sequence Diagram](https://raw.githubusercontent.com/Eric7Coding/NudgeStreamer/master/Pic/NudgeStreamer_Sequence_Diagram.png)
 
 ## 分层架构图 Layer Architecture
 ### 中文 Chinese
-![Layer Architecture](https://raw.githubusercontent.com/Eric7Coding/NudgeStreamer/master/NudgeStreamer_Layer_Architecture.png)
+![Layer Architecture](https://raw.githubusercontent.com/Eric7Coding/NudgeStreamer/master/Pic/NudgeStreamer_Layer_Architecture.png)
 
 ### English
-![Layer Architecture Englis](https://raw.githubusercontent.com/Eric7Coding/NudgeStreamer/master/NudgeStreamer_Layer_Architecture_English.png)
+![Layer Architecture Englis](https://raw.githubusercontent.com/Eric7Coding/NudgeStreamer/master/Pic/NudgeStreamer_Layer_Architecture_English.png)
 
 ## 数据流图 Data-Flow Graph
 ### 软件数据流图 NudgeStreamer Data-Flow Graph
-![NudgeStreamer Data-Flow Graph](https://raw.githubusercontent.com/Eric7Coding/NudgeStreamer/master/NudgeStreamer_Data-Flow_Graph.png)
+![NudgeStreamer Data-Flow Graph](https://raw.githubusercontent.com/Eric7Coding/NudgeStreamer/master/Pic/NudgeStreamer_Data-Flow_Graph.png)
 
 ### 异常或参数数据流图 Parament Data-Flow Graph
-![Parament Data-Flow Graph](https://raw.githubusercontent.com/Eric7Coding/NudgeStreamer/master/Parament_Data_Flow_Graph.png)
+![Parament Data-Flow Graph](https://raw.githubusercontent.com/Eric7Coding/NudgeStreamer/master/Pic/Parament_Data_Flow_Graph.png)
 
 ### 日志数据流图 Log Data-Flow Graph
-![Log Data-Flow Graph](https://raw.githubusercontent.com/Eric7Coding/NudgeStreamer/master/Log_Data-Flow_Graph.png)
+![Log Data-Flow Graph](https://raw.githubusercontent.com/Eric7Coding/NudgeStreamer/master/Pic/Log_Data-Flow_Graph.png)
 
 ## 主要实现思路
 ### 中文 Chinese
-![Connection for UI and Logic Layer in Chinese](https://raw.githubusercontent.com/Eric7Coding/NudgeStreamer/master/Connection_for_UI_and_Logic_Layer_in_Chinese.png)
+![Connection for UI and Logic Layer in Chinese](https://raw.githubusercontent.com/Eric7Coding/NudgeStreamer/master/Pic/Connection_for_UI_and_Logic_Layer_in_Chinese.png)
