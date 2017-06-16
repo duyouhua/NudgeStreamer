@@ -1,4 +1,4 @@
-﻿#include "Frame.h"
+#include "Frame.h"
 #include "Logger.h"
 #include "RtmpPush.h"
 #include "SpsDecode.h"
@@ -18,31 +18,31 @@ namespace Push
     {
         setObjectName("RtmpPush");
 
-        p_url_addr = new char[url.size() + 1];
-        strcpy(p_url_addr, url.c_str());
+        _url_addr = new char[url.size() + 1];
+        strcpy(_url_addr, url.c_str());
 
-        p_buffer = NULL;
-        p_meta_data = NULL;
+        _buffer = NULL;
+        _meta_data = NULL;
     }
 
     RtmpPush::~RtmpPush()
     {
-        if (p_url_addr)
+        if (_url_addr)
         {
-            delete p_url_addr;
-            p_url_addr = NULL;
+            delete _url_addr;
+            _url_addr = NULL;
         }
 
-        if (p_buffer)
+        if (_buffer)
         {
-            delete[] p_buffer;
-            p_buffer = NULL;
+            delete[] _buffer;
+            _buffer = NULL;
         }
 
-        if (p_meta_data)
+        if (_meta_data)
         {
-            delete p_meta_data;
-            p_meta_data = NULL;
+            delete _meta_data;
+            _meta_data = NULL;
         }
 
         Logger::LogMessage* log
@@ -98,7 +98,7 @@ namespace Push
         int i = 0;
 
         // 发送数据
-        while (m_is_push)
+        while (_is_push)
         {
             if (DataBufferPointer::GetInstance().GetEncodeData()->HaveData(ClassName()))
             {
@@ -106,21 +106,21 @@ namespace Push
                 now = RTMP_GetTime();
 
                 std::shared_ptr<Frame> frame = DataBufferPointer::GetInstance().GetEncodeData()->PopTop(ClassName());
-                std::lock_guard<std::mutex> lock(m_mutex);
-                p_buffer = new uint8_t[frame->size];
-                memcpy(p_buffer, frame->data, frame->size);
-                m_buffer_size = frame->size;
+                std::lock_guard<std::mutex> lock(_mutex);
+                _buffer = new uint8_t[frame->size];
+                memcpy(_buffer, frame->data, frame->size);
+                buffer_size = frame->size;
 
                 NaluUnit* nalu_unit;
                 // 查看是否含有sps、pps帧，有就截取出来单独发送到服务器
-                if (0x67 == p_buffer[GetFrameType(p_buffer)])
+                if (0x67 == _buffer[GetFrameType(_buffer)])
                 {
                     uint32_t i = 0, begin = 0, end = 0;
-                    p_meta_data = new RTMPMetaData;
-                    while ((p_meta_data && i < m_buffer_size - 4) || 0x06 == p_buffer[GetFrameType(p_buffer)])
+                    _meta_data = new RTMPMetaData;
+                    while ((_meta_data && i < buffer_size - 4) || 0x06 == _buffer[GetFrameType(_buffer)])
                     {
-                        int ret = GetFrameType(p_buffer + i);
-                        if (ret != -1 || m_buffer_size - 4 == i)
+                        int ret = GetFrameType(_buffer + i);
+                        if (ret != -1 || buffer_size - 4 == i)
                         {
                             if (0 == begin && 0 == end && 0 == i)
                             {
@@ -131,49 +131,49 @@ namespace Push
                             end = i - 1;
                             int size = end + 1 - begin;
                             nalu_unit = new NaluUnit(size);
-                            memcpy(nalu_unit->data, p_buffer + begin, size);
+                            memcpy(nalu_unit->data, _buffer + begin, size);
                             nalu_unit->type = nalu_unit->data[GetFrameType(nalu_unit->data)] & 0x1f;
                             begin = i;
 
                             if (0x07 == nalu_unit->type)
                             {
-                                p_meta_data->sps = new uint8_t[nalu_unit->size];
-                                memcpy(p_meta_data->sps, nalu_unit->data, nalu_unit->size);
-                                p_meta_data->sps_len = nalu_unit->size;
+                                _meta_data->sps = new uint8_t[nalu_unit->size];
+                                memcpy(_meta_data->sps, nalu_unit->data, nalu_unit->size);
+                                _meta_data->sps_len = nalu_unit->size;
 
                                 // 解码SPS,获取视频图像宽、高信息
-                                h264_decode_sps(p_meta_data->sps, p_meta_data->sps_len, p_meta_data->width, p_meta_data->height, p_meta_data->frame_rate);
+                                h264_decode_sps(_meta_data->sps, _meta_data->sps_len, _meta_data->width, _meta_data->height, _meta_data->frame_rate);
 
-                                if (!p_meta_data->frame_rate)
-                                    p_meta_data->frame_rate = 25;
+                                if (!_meta_data->frame_rate)
+                                    _meta_data->frame_rate = 25;
 
                                 tick = 0;
-                                tick_gap = 1000 / p_meta_data->frame_rate;
+                                tick_gap = 1000 / _meta_data->frame_rate;
                             }
                             else if (0x08 == nalu_unit->type)
                             {
-                                p_meta_data->pps = new uint8_t[nalu_unit->size];
-                                memcpy(p_meta_data->pps, nalu_unit->data, nalu_unit->size);
-                                p_meta_data->pps_len = nalu_unit->size;
+                                _meta_data->pps = new uint8_t[nalu_unit->size];
+                                memcpy(_meta_data->pps, nalu_unit->data, nalu_unit->size);
+                                _meta_data->pps_len = nalu_unit->size;
 
-                                m_buffer_size -= (p_meta_data->sps_len + p_meta_data->pps_len);
-                                uint8_t* temp = new uint8_t[m_buffer_size];
-                                memcpy(temp, p_buffer + i, m_buffer_size);
-                                delete[] p_buffer;
-                                p_buffer = temp;
+                                buffer_size -= (_meta_data->sps_len + _meta_data->pps_len);
+                                uint8_t* temp = new uint8_t[buffer_size];
+                                memcpy(temp, _buffer + i, buffer_size);
+                                delete[] _buffer;
+                                _buffer = temp;
 
                                 i = 0;
                                 begin = end = 0;
 
 #ifdef FILE_H264_4_TEST
-                                fwrite(p_meta_data->sps, 1, p_meta_data->sps_len, out_file);
-                                fwrite(p_meta_data->pps, 1, p_meta_data->pps_len, out_file);
+                                fwrite(_meta_data->sps, 1, _meta_data->sps_len, out_file);
+                                fwrite(_meta_data->pps, 1, _meta_data->pps_len, out_file);
 #endif
 
-                                if (SendVideoSpsPps(p_meta_data->pps, p_meta_data->pps_len, p_meta_data->sps, p_meta_data->sps_len))
+                                if (SendVideoSpsPps(_meta_data->pps, _meta_data->pps_len, _meta_data->sps, _meta_data->sps_len))
                                 {
-                                    delete p_meta_data;
-                                    p_meta_data = NULL;
+                                    delete _meta_data;
+                                    _meta_data = NULL;
                                 }
                             }
                             else if (0x06 == nalu_unit->type)
@@ -183,11 +183,11 @@ namespace Push
 #ifdef FILE_H264_4_TEST
                                 fwrite(nalu_unit->data, 1, nalu_unit->size, out_file);
 #endif
-                                m_buffer_size -= nalu_unit->size;
-                                uint8_t* temp = new uint8_t[m_buffer_size];
-                                memcpy(temp, p_buffer + begin, m_buffer_size);
-                                delete[] p_buffer;
-                                p_buffer = temp;
+                                buffer_size -= nalu_unit->size;
+                                uint8_t* temp = new uint8_t[buffer_size];
+                                memcpy(temp, _buffer + begin, buffer_size);
+                                delete[] _buffer;
+                                _buffer = temp;
                             }
 
                             if (nalu_unit)
@@ -208,8 +208,8 @@ namespace Push
                     }
                 }
 
-                nalu_unit = new NaluUnit(m_buffer_size);
-                memcpy(nalu_unit->data, p_buffer, m_buffer_size);
+                nalu_unit = new NaluUnit(buffer_size);
+                memcpy(nalu_unit->data, _buffer, buffer_size);
                 nalu_unit->type = nalu_unit->data[GetFrameType(nalu_unit->data)] & 0x1f;
 
                 key_frame = (0x05 == nalu_unit->type) ? true : false;
@@ -225,12 +225,12 @@ namespace Push
                     nalu_unit = NULL;
                 }
 
-                if (p_buffer)
+                if (_buffer)
                 {
-                    delete[] p_buffer;
-                    p_buffer = NULL;
+                    delete[] _buffer;
+                    _buffer = NULL;
 
-                    m_buffer_size = 0;
+                    buffer_size = 0;
                 }
 
                 msleep(tick_gap  - now + last_update);
@@ -245,13 +245,13 @@ namespace Push
 
     bool RtmpPush::RTMPConnect()
     {
-        p_rtmp = RTMP_Alloc();
-        RTMP_Init(p_rtmp);
+        _rtmp = RTMP_Alloc();
+        RTMP_Init(_rtmp);
 
         // 设置URL
-        if (!RTMP_SetupURL(p_rtmp, p_url_addr))
+        if (!RTMP_SetupURL(_rtmp, _url_addr))
         {
-            RTMP_Free(p_rtmp);
+            RTMP_Free(_rtmp);
 
             Logger::LogMessage* log
                 = new Logger::LogMessage
@@ -267,11 +267,11 @@ namespace Push
         }
 
         // 设置可写,即发布流,这个函数必须在连接前使用,否则无效
-        RTMP_EnableWrite(p_rtmp);
+        RTMP_EnableWrite(_rtmp);
         // 连接服务器
-        if (!RTMP_Connect(p_rtmp, NULL))
+        if (!RTMP_Connect(_rtmp, NULL))
         {
-            RTMP_Free(p_rtmp);
+            RTMP_Free(_rtmp);
 
             Logger::LogMessage* log
                 = new Logger::LogMessage
@@ -287,10 +287,10 @@ namespace Push
         }
 
         // 连接流
-        if (!RTMP_ConnectStream(p_rtmp, 0))
+        if (!RTMP_ConnectStream(_rtmp, 0))
         {
-            RTMP_Close(p_rtmp);
-            RTMP_Free(p_rtmp);
+            RTMP_Close(_rtmp);
+            RTMP_Free(_rtmp);
 
             Logger::LogMessage* log
                 = new Logger::LogMessage
@@ -372,11 +372,11 @@ namespace Push
 
     void RtmpPush::RTMPClose()
     {
-        if (p_rtmp)
+        if (_rtmp)
         {
-            RTMP_Close(p_rtmp);
-            RTMP_Free(p_rtmp);
-            p_rtmp = NULL;
+            RTMP_Close(_rtmp);
+            RTMP_Free(_rtmp);
+            _rtmp = NULL;
 
             Logger::LogMessage* log
                 = new Logger::LogMessage
@@ -458,10 +458,10 @@ namespace Push
         _packet->m_nTimeStamp = 0;
         _packet->m_hasAbsTimestamp = 0;
         _packet->m_headerType = RTMP_PACKET_SIZE_MEDIUM;
-        _packet->m_nInfoField2 = p_rtmp->m_stream_id;
+        _packet->m_nInfoField2 = _rtmp->m_stream_id;
 
         // 调用发送接口
-        int result = RTMP_SendPacket(p_rtmp, _packet, TRUE);
+        int result = RTMP_SendPacket(_rtmp, _packet, TRUE);
         delete[] _packet;   //释放内存
 
         return result;
@@ -486,16 +486,16 @@ namespace Push
         memcpy(_packet->m_body, data, size);
         _packet->m_hasAbsTimestamp = 0;
         _packet->m_packetType = packetType;
-        _packet->m_nInfoField2 = p_rtmp->m_stream_id;
+        _packet->m_nInfoField2 = _rtmp->m_stream_id;
         _packet->m_nChannel = 0x04;
 
         _packet->m_headerType = RTMP_PACKET_SIZE_LARGE;
         _packet->m_nTimeStamp = timeStamp;
 
         int result = 0;
-        if (RTMP_IsConnected(p_rtmp))
+        if (RTMP_IsConnected(_rtmp))
         {
-            result = RTMP_SendPacket(p_rtmp, _packet, TRUE);// TRUE为放进发送队列,FALSE是不放进发送队列,直接发送
+            result = RTMP_SendPacket(_rtmp, _packet, TRUE);// TRUE为放进发送队列,FALSE是不放进发送队列,直接发送
         }
         delete[] _packet;
 

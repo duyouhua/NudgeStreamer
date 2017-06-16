@@ -1,4 +1,4 @@
-﻿#ifndef _LOGGER_H
+#ifndef _LOGGER_H
 #define _LOGGER_H
 
 #include <QThread>
@@ -22,13 +22,13 @@ namespace Logger
 
         void ShutDown()
         {
-            m_shut_down = false;
+            shut_down = false;
         }
 
     protected:
         std::string ClassName()
         {
-            return m_class_name;
+            return class_name;
         }
 
         void run();
@@ -50,9 +50,9 @@ namespace Logger
             );
 
     private:
-        bool m_shut_down;
-        QFile* p_file_log;
-        std::string m_class_name;
+        bool shut_down;
+        QFile* _file_log;
+        std::string class_name;
     };
 }
 

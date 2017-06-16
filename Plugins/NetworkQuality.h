@@ -1,4 +1,4 @@
-﻿/*
+/*
  * 计算网络质量的抽象类，提供了计算网络质量以及初始化的接口；
  * 实现该模块功能必须继承该抽象类
 */
@@ -14,14 +14,14 @@ struct NetworkParament;
 class NetworkQuality : public QThread
 {
 public:
-    NetworkQuality() : m_shut_down(true) {}
+    NetworkQuality() : shut_down(true) {}
 
 public:
     virtual bool Initial() = 0;
 
     void ShutDown()
     {
-        m_shut_down = false;
+        shut_down = false;
     }
 
 protected:
@@ -36,7 +36,7 @@ protected:
     }
 
 protected:
-    bool m_shut_down;
+    bool shut_down;
 };
 
 #endif // _NETWORK_QUALITY_H

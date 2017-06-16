@@ -1,4 +1,4 @@
-﻿/*
+/*
  * 该类实现视频显示模块，继承VidoeDisplay抽象类，
  * 它从消息队列中获取截屏后的YUV格式图片，利用ffm
  * peg库对其转换成RBA格式，存到QImage对象中，再
@@ -35,10 +35,10 @@ namespace Display
         const int DEFAULT_HEIGHT;
 
     private:
-        AVFrame* p_frame_yuv;
-        AVFrame* p_frame_rgb;
-        struct SwsContext* img_convert_ctx;
-        std::mutex m_mutex;
+        AVFrame* _frame_yuv;
+        AVFrame* _frame_rgb;
+        struct SwsContext* _img_convert_ctx;
+        std::mutex _mutex;
     };
 }
 

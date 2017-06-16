@@ -50,42 +50,42 @@ namespace Encode
         };
 
     VideoEncoder::VideoEncoder() :
-        b_isInit(false),
-        m_class_name("VideoEncoder")
+        isInit(false),
+        class_name("VideoEncoder")
     {
-        p_codec_context = NULL;
-        p_codec = NULL;
-        p_packet = NULL;
-        p_frame_yuv = NULL;
+        _codec_context = NULL;
+        _codec = NULL;
+        _packet = NULL;
+        _frame_yuv = NULL;
     }
 
     VideoEncoder::~VideoEncoder()
     {
-        av_free(p_frame_yuv);
-        avcodec_close(p_codec_context);
-        av_free(p_codec_context);
+        av_free(_frame_yuv);
+        avcodec_close(_codec_context);
+        av_free(_codec_context);
 #ifdef OUT_FILE_H264
-        fclose(file_out);
+        fclose(_file_out);
 #endif
     }
 
     bool VideoEncoder::Initial(const int& width, const int& height, const int& i)
     {
         // 检查是否已经进行了初始化，已经初始化了就返回
-        if (b_isInit)
+        if (isInit)
             return true;
 
         av_register_all();
         avcodec_register_all();
-        p_codec = avcodec_find_encoder(AV_CODEC_ID_H264);
-        if (!p_codec)
+        _codec = avcodec_find_encoder(AV_CODEC_ID_H264);
+        if (!_codec)
         {
             // 异常处理
             Logger::LogMessage* log
                 = new Logger::LogMessage
                     (
                     Logger::ERRORINFOR,
-                    m_class_name,
+                    class_name,
                     "H264 codec not found",
                     QDateTime::currentDateTime().toString("yyyy-M-d h:m:s:zzz").toStdString()
                     );
@@ -94,39 +94,39 @@ namespace Encode
             return false;
         }
 
-        p_codec_context = avcodec_alloc_context3(p_codec);
-        p_codec_context->codec_type = AVMEDIA_TYPE_VIDEO;
-        p_codec_context->pix_fmt = AV_PIX_FMT_YUV420P;
-        p_codec_context->width = width;
-        p_codec_context->height = height;
+        _codec_context = avcodec_alloc_context3(_codec);
+        _codec_context->codec_type = AVMEDIA_TYPE_VIDEO;
+        _codec_context->pix_fmt = AV_PIX_FMT_YUV420P;
+        _codec_context->width = width;
+        _codec_context->height = height;
         // 两个非B帧之间允许出现多少个B帧数，设置0表示不使用B帧，
         // 没有延迟，B帧越多，容量越小，及压缩效果最好，但延迟也较多
-        p_codec_context->max_b_frames = 1;
+        _codec_context->max_b_frames = 1;
         // 帧率的基本单位，表示1秒25帧
-        p_codec_context->time_base.num = 1;
-        p_codec_context->time_base.den = 25;
+        _codec_context->time_base.num = 1;
+        _codec_context->time_base.den = 25;
         // 视频中所有祯（包括i/b/p）的最大Q值差距，
         // 在帧与帧之间进行切变的量化因子的最大变化量
-        p_codec_context->max_qdiff = 4;
-        p_codec_context->me_range = 16;
+        _codec_context->max_qdiff = 4;
+        _codec_context->me_range = 16;
         SetEncodeParam(i);
 
         AVDictionary* _parament = 0;
-        if (AV_CODEC_ID_H264 == p_codec_context->codec_id)
+        if (AV_CODEC_ID_H264 == _codec_context->codec_id)
         {
             av_dict_set(&_parament, "preset", "fast", 0);
             av_dict_set(&_parament, "tune", "zerolatency", 0);
             av_dict_set(&_parament, "profile", "main", 0);
         }
 
-        if (avcodec_open2(p_codec_context, p_codec, &_parament) < 0)
+        if (avcodec_open2(_codec_context, _codec, &_parament) < 0)
         {
             // 异常处理
             Logger::LogMessage* log
                 = new Logger::LogMessage
                     (
                     Logger::ERRORINFOR,
-                    m_class_name,
+                    class_name,
                     "can not open encoder",
                     QDateTime::currentDateTime().toString("yyyy-M-d h:m:s:zzz").toStdString()
                     );
@@ -135,22 +135,22 @@ namespace Encode
             return false;
         }
 
-        p_frame_yuv = av_frame_alloc();
-        p_packet = (AVPacket*)av_malloc(sizeof(AVPacket));
+        _frame_yuv = av_frame_alloc();
+        _packet = (AVPacket*)av_malloc(sizeof(AVPacket));
 
         av_dict_free(&_parament);
 
-        b_isInit = true;
+        isInit = true;
 
 #ifdef OUT_FILE_H264
         QString path = QString("D:/OUT_H264_") + QString::number(i) + QString(".h264");
-        file_out = fopen(path.toStdString().c_str(), "wb+");
+        _file_out = fopen(path.toStdString().c_str(), "wb+");
 #endif
         Logger::LogMessage* log
             = new Logger::LogMessage
                 (
                 Logger::INFO,
-                m_class_name,
+                class_name,
                 "initial successfully",
                 QDateTime::currentDateTime().toString("yyyy-M-d h:m:s:zzz").toStdString()
                 );
@@ -166,26 +166,26 @@ namespace Encode
             std::shared_ptr<PicYUV> yuv_data = DataBufferPointer::GetInstance().GetPicYUVData()->PopTop(class_name);
             if (yuv_data->data)
             {
-                p_frame_yuv->width = yuv_data->width;
-                p_frame_yuv->height = yuv_data->height;
-                p_frame_yuv->format = AV_PIX_FMT_YUV420P;
-                int _malloc_size = avpicture_get_size(p_codec_context->pix_fmt, p_codec_context->width, p_codec_context->height);
+                _frame_yuv->width = yuv_data->width;
+                _frame_yuv->height = yuv_data->height;
+                _frame_yuv->format = AV_PIX_FMT_YUV420P;
+                int _malloc_size = avpicture_get_size(_codec_context->pix_fmt, _codec_context->width, _codec_context->height);
                 uint8_t* _buff = (uint8_t*)av_malloc(_malloc_size);
-                avpicture_fill((AVPicture*)p_frame_yuv, _buff, p_codec_context->pix_fmt, p_codec_context->width, p_codec_context->height);
+                avpicture_fill((AVPicture*)_frame_yuv, _buff, _codec_context->pix_fmt, _codec_context->width, _codec_context->height);
 
-                if (av_new_packet(p_packet, _malloc_size))
+                if (av_new_packet(_packet, _malloc_size))
                 {
                     // 异常处理
                 }
 
                 int _size = yuv_data->width * yuv_data->height;
-                memcpy(p_frame_yuv->data[0], yuv_data->data[0], _size);
-                memcpy(p_frame_yuv->data[1], yuv_data->data[1], _size / 4);
-                memcpy(p_frame_yuv->data[2], yuv_data->data[2], _size / 4);
+                memcpy(_frame_yuv->data[0], yuv_data->data[0], _size);
+                memcpy(_frame_yuv->data[1], yuv_data->data[1], _size / 4);
+                memcpy(_frame_yuv->data[2], yuv_data->data[2], _size / 4);
 
                 int got_picture = 0;
                 // Encode
-                int ret = avcodec_encode_video2(p_codec_context, p_packet, p_frame_yuv, &got_picture);
+                int ret = avcodec_encode_video2(_codec_context, _packet, _frame_yuv, &got_picture);
                 if (ret < 0)
                 {
                     // Error
@@ -196,32 +196,32 @@ namespace Encode
                 {
                     SaveEncodeData();
 #ifdef OUT_FILE_H264
-                    fwrite(p_packet->data, 1, p_packet->size, file_out);
+                    fwrite(_packet->data, 1, _packet->size, _file_out);
 #endif
                 }
 
                 av_free(_buff);
-                av_free_packet(p_packet);
+                av_free_packet(_packet);
             }
         }
     }
 
     inline void VideoEncoder::SaveEncodeData()
     {
-        Frame* frame = new Frame(p_packet->size);
-        memcpy(frame->data, p_packet->data, p_packet->size);
+        Frame* frame = new Frame(_packet->size);
+        memcpy(frame->data, _packet->data, _packet->size);
         DataBufferPointer::GetInstance().GetEncodeData()->PushBack(std::shared_ptr<Frame>(frame));
     }
 
     void VideoEncoder::SetEncodeParam(const int& i)
     {
-        p_codec_context->bit_rate = _param[i].bit_rate;
-        p_codec_context->bit_rate_tolerance = _param[i].bit_rate_tolerance;
-        p_codec_context->gop_size = _param[i].gop_size;
-        p_codec_context->qcompress = _param[i].qcompress;
-        p_codec_context->qmin = _param[i].qmin;
-        p_codec_context->qmax = _param[i].qmax;
-        p_codec_context->qblur = _param[i].qblur;
+        _codec_context->bit_rate = _param[i].bit_rate;
+        _codec_context->bit_rate_tolerance = _param[i].bit_rate_tolerance;
+        _codec_context->gop_size = _param[i].gop_size;
+        _codec_context->qcompress = _param[i].qcompress;
+        _codec_context->qmin = _param[i].qmin;
+        _codec_context->qmax = _param[i].qmax;
+        _codec_context->qblur = _param[i].qblur;
     }
 
     bool EncodePool::Initial(const int& width, const int& height)
@@ -231,7 +231,7 @@ namespace Encode
             VideoEncoder* _encoder = new VideoEncoder;
             if (_encoder->Initial(width, height, i))
             {
-                m_vec_encoders.push_back(AvEncoderPtr(_encoder));
+                vec_encoders.push_back(AvEncoderPtr(_encoder));
             }
             else
             {
@@ -239,7 +239,7 @@ namespace Encode
                     = new Logger::LogMessage
                         (
                         Logger::WARNING,
-                        m_class_name,
+                        class_name,
                         "initial failure",
                         QDateTime::currentDateTime().toString("yyyy-M-d h:m:s:zzz").toStdString()
                         );
@@ -253,7 +253,7 @@ namespace Encode
             = new Logger::LogMessage
                 (
                 Logger::INFO,
-                m_class_name,
+                class_name,
                 "initial successfully",
                 QDateTime::currentDateTime().toString("yyyy-M-d h:m:s:zzz").toStdString()
                 );

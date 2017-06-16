@@ -1,4 +1,4 @@
-﻿/*
+/*
  * 界面类，有信号槽的绑定，
  * 重绘事件和关闭事件的重
  * 写，各个模块插件的初始
@@ -31,7 +31,7 @@ public:
     ~Streamer();
 
 public:
-    void InitialPlugins();// 初始化插件
+    void InitialPlugins();// 初始化插件 Initial Plugins
 
 protected:
     // 重写画面绘制事件，当视频显示模块发送图片过来时就会进行一次重新绘制并进行显示
@@ -61,12 +61,12 @@ private:
 
 private:
     Ui::Streamer* ui;
-    PushFlow* p_push;// 视频推流抽象类的指针
-    VideoEncode* p_encode;// 视频编码抽象类的指针
-    VideoDisplay* p_display;// 视频显示抽象类的指针
-    NetworkQuality* p_network;// 网络计算模块抽象类的指针
-    InterceptScreen* p_catpure;// 截屏模块抽象类的指针
-    QImage m_image;// 记录当前的图像
+    PushFlow* _push;// 视频推流抽象类的指针
+    VideoEncode* _encode;// 视频编码抽象类的指针
+    VideoDisplay* _display;// 视频显示抽象类的指针
+    NetworkQuality* _network;// 网络计算模块抽象类的指针
+    InterceptScreen* _catpure;// 截屏模块抽象类的指针
+    QImage image;// 记录当前的图像
 };
 
 #endif // _STREAMER_H

@@ -48,7 +48,7 @@ namespace Network
     void TcpTest::run()
     {
         QTcpSocket tcp_connect;
-        while (m_shut_down)
+        while (shut_down)
         {
             int success_count = 0, unsuccess_count = 0;
             int min = 999999999, max = 0, delay = 0;

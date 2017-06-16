@@ -1,4 +1,4 @@
-﻿/*
+/*
  * 消息队列类模板，主要用途是：用来存储数据；
  * 截屏对象截屏后将数据存入该消息队列中，而
  * 编码对象与视频显示对象将会在相应消息队列
@@ -38,14 +38,14 @@ public:
 private:
     std::size_t Size(const std::string& customer)
     {
-        std::lock_guard<std::mutex> lock(m_mutex);
-        return m_data_deque.at(customer).size();
+        std::lock_guard<std::mutex> lock(_mutex);
+        return _data_deque.at(customer).size();
     }
 
 private:
-    std::mutex m_mutex;
+    std::mutex _mutex;
     // 用string标记消费者，string是每个模块中框架的私有变量_class_name，每个调用者都有一个队列保存对应的数据
-    std::map<std::string, std::deque<std::shared_ptr<T>> > m_data_deque;
+    std::map<std::string, std::deque<std::shared_ptr<T>> > _data_deque;
 };
 
 template<class T>
@@ -53,10 +53,10 @@ void DataBufferQueue<T>::RegistCustomer(const std::string& customer)
 {
     // 消费者类初始化时先在对应消息队列注册
     // 访问互斥变量，需要上锁s
-    std::lock_guard<std::mutex> lock(m_mutex);
+    std::lock_guard<std::mutex> lock(_mutex);
     std::deque<std::shared_ptr<T> > deq;
     deq.clear();
-    m_data_deque[customer] = deq;
+    _data_deque[customer] = deq;
 }
 
 template<class T>
@@ -64,9 +64,9 @@ void DataBufferQueue<T>::PushBack(const std::shared_ptr<T>& creator)
 {
     // 给map中每一个映射关系队列中添加元素
     // 访问互斥变量，需要上锁
-    std::lock_guard<std::mutex> lock(m_mutex);
-    auto it = m_data_deque.begin();
-    for (; it != m_data_deque.end(); ++it)
+    std::lock_guard<std::mutex> lock(_mutex);
+    auto it = _data_deque.begin();
+    for (; it != _data_deque.end(); ++it)
         (*it).second.push_back(creator);
 }
 
@@ -79,21 +79,21 @@ std::shared_ptr<T> DataBufferQueue<T>::PopTop(const std::string& customer)
      */
 
     // 访问互斥变量，需要上锁
-    std::lock_guard<std::mutex> lock(m_mutex);
-    auto it = m_data_deque.find(customer);
-    if (m_data_deque.end() != it)
+    std::lock_guard<std::mutex> lock(_mutex);
+    auto it = _data_deque.find(customer);
+    if (_data_deque.end() != it)
     {
         std::shared_ptr<T> result;
         // 当当前队列存的是网络质量参数类型的时候，则会取队列尾部元素，并清除整条队列
         if (typeid(NetworkParament) == typeid(T))
         {
-            result = m_data_deque.at(customer).back();
-            m_data_deque.at(customer).clear();
+            result = _data_deque.at(customer).back();
+            _data_deque.at(customer).clear();
         }
         else
         {
-            result = m_data_deque.at(customer).front();
-            m_data_deque.at(customer).pop_front();
+            result = _data_deque.at(customer).front();
+            _data_deque.at(customer).pop_front();
         }
 
         return result;

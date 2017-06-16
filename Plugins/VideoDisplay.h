@@ -1,4 +1,4 @@
-﻿/*
+/*
  * 视频播放，提供了相应的接口，
  * 成员变量主要用于消息队列获取数据，
  * 实现类必须继承该抽象类
@@ -17,8 +17,8 @@ class VideoDisplay : public QThread
 {
 public:
     VideoDisplay() :
-        m_class_name("VideoDisplay"),
-        m_shut_down(true)
+        class_name("VideoDisplay"),
+        shut_down(true)
     {
         DataBufferPointer::GetInstance().GetPicYUVData()->RegistCustomer(ClassName());
     }
@@ -28,13 +28,13 @@ public:
 
     void ShutDown()
     {
-        m_shut_down = false;
+        shut_down = false;
     }
 
 protected:
     std::string ClassName()
     {
-        return m_class_name;
+        return class_name;
     }
 
     void ThrowError(const QString& err)
@@ -48,10 +48,10 @@ protected:
     }
 
 protected:
-    bool m_shut_down;
+    bool shut_down;
 
 private:
-    const std::string m_class_name;
+    const std::string class_name;
 };
 
 #endif // _VIDEO_DISPLAY_H

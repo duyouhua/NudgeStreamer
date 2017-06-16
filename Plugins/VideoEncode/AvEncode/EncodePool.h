@@ -1,4 +1,4 @@
-﻿/*
+/*
  * 单个编码类以及编码池类，在视频编码模块
  * 初始化时就会初始化编码池，同时编码池就
  * 会初始化4个不同码率的编码对象，当网络
@@ -36,14 +36,14 @@ namespace Encode
         void SaveEncodeData();
 
     private:
-        bool b_isInit;
-        AVCodec* p_codec;// 编码器
-        AVPacket* p_packet;
-        AVFrame* p_frame_yuv;
-        AVCodecContext* p_codec_context;
-        std::string m_class_name;
+        bool isInit;
+        AVCodec* _codec;// 编码器
+        AVPacket* _packet;
+        AVFrame* _frame_yuv;
+        AVCodecContext* _codec_context;
+        std::string class_name;
 #ifdef OUT_FILE_H264
-        FILE* file_out;
+        FILE* _file_out;
 #endif
     };
 
@@ -62,19 +62,19 @@ namespace Encode
 
         AvEncoderPtr GetCoder(const int& encoder_id)
         {
-            return m_vec_encoders[encoder_id];
+            return vec_encoders[encoder_id];
         }
 
     private:
         EncodePool(const EncodePool&) = delete;
         EncodePool& operator=(const EncodePool&) = delete;
 
-        EncodePool() : m_class_name("EncodePool") {}
+        EncodePool() : class_name("EncodePool") {}
         ~EncodePool() {}
 
     private:
-        std::string m_class_name;
-        std::vector<AvEncoderPtr> m_vec_encoders;
+        std::string class_name;
+        std::vector<AvEncoderPtr> vec_encoders;
     };
 }
 

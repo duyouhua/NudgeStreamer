@@ -8,28 +8,28 @@
 namespace Logger
 {
     Log::Log() :
-        m_class_name("Log"),
-        m_shut_down(true)
+        class_name("Log"),
+        shut_down(true)
     {
         DataBufferPointer::GetInstance().GetLog()->RegistCustomer(ClassName());
 
-        p_file_log = new QFile("Log");
-        p_file_log->open(QIODevice::WriteOnly | QIODevice::Text);
+        _file_log = new QFile("Log");
+        _file_log->open(QIODevice::WriteOnly | QIODevice::Text);
     }
 
     Log::~Log()
     {
-        if (p_file_log)
+        if (_file_log)
         {
-            p_file_log->close();
-            delete p_file_log;
-            p_file_log = NULL;
+            _file_log->close();
+            delete _file_log;
+            _file_log = NULL;
         }
     }
 
     void Log::run()
     {
-        while (m_shut_down)
+        while (shut_down)
         {
             if (DataBufferPointer::GetInstance().GetLog()->HaveData(ClassName()))
             {
@@ -48,7 +48,7 @@ namespace Logger
 
     void Log::WriteLog(const int& level, const std::string& class_name, const std::string& message, const std::string& time)
     {
-        QTextStream text(p_file_log);
+        QTextStream text(_file_log);
         switch (level)
         {
         case INFO:

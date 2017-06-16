@@ -1,4 +1,4 @@
-﻿#ifndef _RTMP_PUSH_H
+#ifndef _RTMP_PUSH_H
 #define _RTMP_PUSH_H
 
 #include "PushFlow.h"
@@ -107,12 +107,12 @@ namespace Push
         const int RTMP_HEAD_SIZE;
 
     private:
-        uint32_t m_buffer_size;
-        RTMP* p_rtmp;
-        uint8_t* p_buffer;
-        char* p_url_addr;
-        RTMPMetaData* p_meta_data;
-        std::mutex m_mutex;
+        uint32_t buffer_size;
+        RTMP* _rtmp;
+        uint8_t* _buffer;
+        char* _url_addr;
+        RTMPMetaData* _meta_data;
+        std::mutex _mutex;
     };
 }
 

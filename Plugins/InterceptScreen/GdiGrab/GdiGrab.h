@@ -1,4 +1,4 @@
-﻿/*
+/*
  * GdiGrab类主要运用ffmpeg库调用Windows Gdi进行截屏；
  * 截屏后运用ffmpeg库对RGB的数据转化为YUV格式的数据；
  * 转化后数据存在ffmpeg库中的AVFrame结构体，则需要将
@@ -45,14 +45,14 @@ namespace Catpure
         const int DEFAULT_HEIGHT;
 
     private:
-        AVFormatContext* p_format_context;
-        AVCodecContext* p_codec_context;
-        AVCodec* p_codec;
-        AVPacket* p_packet;
-        struct SwsContext* img_convert_ctx;
-        AVFrame* p_frame;
-        AVFrame* p_frame_yuv;
-        int videoindex;
+        AVFormatContext* _format_context;
+        AVCodecContext* _codec_context;
+        AVCodec* _codec;
+        AVPacket* _packet;
+        struct SwsContext* _img_convert_ctx;
+        AVFrame* _frame;
+        AVFrame* _frame_yuv;
+        int video_index;
 #ifdef OUT_FILE_YUV
         FILE* fp_yuv;
 #endif

@@ -1,4 +1,4 @@
-﻿/*
+/*
  * 视频编码类，提供了相应的接口，成员变量类名主要
  * 用于消息队列中获取数据，实现该模块的实现类必须
  * 继承该抽象类
@@ -18,8 +18,8 @@ class VideoEncode : public QThread
 {
 public:
     VideoEncode() :
-        m_class_name("VideoEncode"),
-        m_shut_down(true)
+        class_name("VideoEncode"),
+        shut_down(true)
     {
         DataBufferPointer::GetInstance().GetPicYUVData()->RegistCustomer(ClassName());
         DataBufferPointer::GetInstance().GetNetworkParam()->RegistCustomer(ClassName());
@@ -30,13 +30,13 @@ public:
 
     void ShutDown()
     {
-        m_shut_down = false;
+        shut_down = false;
     }
 
 protected:
     std::string ClassName()
     {
-        return m_class_name;
+        return class_name;
     }
 
     void ThrowError(const QString& err)
@@ -45,10 +45,10 @@ protected:
     }
 
 protected:
-    bool m_shut_down;
+    bool shut_down;
 
 private:
-    const std::string m_class_name;
+    const std::string class_name;
 };
 
 #endif // _VIDEO_ENCODE_H

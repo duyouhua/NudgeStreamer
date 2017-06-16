@@ -63,52 +63,52 @@ void Streamer::InitialPlugins()
     DataBufferPointer::GetInstance().GetLog()->PushBack(std::shared_ptr<Logger::LogMessage>(log));
 
     // 初始化截屏模块
-    Catpure::InterceptFactory _catpure;
-    p_catpure = _catpure.CreateInterceptClass(std::string("GdiGrab"), DEFAULT_WIDTH, DEFAULT_HEIGHT);
-    if (p_catpure->Initial())
+    Catpure::InterceptFactory catpure_factory;
+    _catpure = catpure_factory.CreateInterceptClass(std::string("GdiGrab"), DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    if (_catpure->Initial())
     {
-        p_catpure->start();
+        _catpure->start();
     }
 
     // 初始化网络质量测试模块
-    Network::NetworkFactory _network;
-    p_network = _network.CreateNetworkClass(std::string("Tcping"), std::string("192.168.199.133"), 12678);
-    if (p_network->Initial())
+    Network::NetworkFactory network_factory;
+    _network = network_factory.CreateNetworkClass(std::string("Tcping"), std::string("172.18.102.254"), 12678);
+    if (_network->Initial())
     {
-        p_network->start();
+        _network->start();
     }
 
     // 初始化视频播放模块
-    Display::DisplayFactory _display;
-    p_display = _display.CreateDisplayClass(std::string("PicSendUI"), DEFAULT_WIDTH, DEFAULT_HEIGHT, NULL);
-    if (p_display->Initial())
+    Display::DisplayFactory display_factory;
+    _display = display_factory.CreateDisplayClass(std::string("PicSendUI"), DEFAULT_WIDTH, DEFAULT_HEIGHT, NULL);
+    if (_display->Initial())
     {
-        p_display->start();
+        _display->start();
     }
 
     // 初始化视频编码模块
-    Encode::EncodeFactory _encode;
-    p_encode = _encode.CreateEncodeClass(std::string("AvEncode"), DEFAULT_WIDTH, DEFAULT_HEIGHT);
-    if (p_encode->Initial())
+    Encode::EncodeFactory encode_factory;
+    _encode = encode_factory.CreateEncodeClass(std::string("AvEncode"), DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    if (_encode->Initial())
     {
-        p_encode->start();
+        _encode->start();
     }
 
     // 初始化视频推流模块
-    Push::PushFactory _push;
-    p_push = _push.CreatePushClass("RtmpPush", "rtmp://172.18.102.254:12678/live/text");
-    p_push->Initial();
+    Push::PushFactory push_factory;
+    _push = push_factory.CreatePushClass("RtmpPush", "rtmp://172.18.102.254:12678/live/text");
+    _push->Initial();
 }
 
 // 重绘视频显示界面区域
 void Streamer::paintEvent(QPaintEvent* event)
 {
     QPainter painter(this);
-    if (m_image.size().width() <= 0)
+    if (this->image.size().width() <= 0)
         return;
 
     // 将图像按比例缩放成和窗口一样大小
-    QImage image = m_image.scaled(ui->VideoDisplay->size(), Qt::KeepAspectRatio);
+    QImage image = this->image.scaled(ui->VideoDisplay->size(), Qt::KeepAspectRatio);
 
     int x = ui->VideoDisplay->width() - image.width();
     int y = ui->VideoDisplay->height() - image.height();
@@ -147,33 +147,33 @@ void Streamer::closeEvent(QCloseEvent* event)
 
     hide();
 
-    p_network->ShutDown();
-    p_network->quit();
-    p_network->wait();
-    p_network->deleteLater();
+    _network->ShutDown();
+    _network->quit();
+    _network->wait();
+    _network->deleteLater();
 
-    p_catpure->ShutDown();
-    p_catpure->quit();
-    p_catpure->wait();
-    p_catpure->deleteLater();
+    _catpure->ShutDown();
+    _catpure->quit();
+    _catpure->wait();
+    _catpure->deleteLater();
 
-    p_display->ShutDown();
-    p_display->quit();
-    p_display->wait();
-    p_display->deleteLater();
+    _display->ShutDown();
+    _display->quit();
+    _display->wait();
+    _display->deleteLater();
 
-    p_encode->ShutDown();
-    p_encode->quit();
-    p_encode->wait();
-    p_encode->deleteLater();
+    _encode->ShutDown();
+    _encode->quit();
+    _encode->wait();
+    _encode->deleteLater();
 
-    if (p_push->isRunning())
+    if (_push->isRunning())
     {
-        p_push->StopPush();
+        _push->StopPush();
     }
-    p_push->quit();
-    p_push->wait();
-    p_push->deleteLater();
+    _push->quit();
+    _push->wait();
+    _push->deleteLater();
 
     Logger::Log::GetInstance().ShutDown();
     Logger::Log::GetInstance().quit();
@@ -202,7 +202,7 @@ void Streamer::ShowJitter(const NetworkParament& parament)
 // 获取图片进行视频播放
 void Streamer::DisplayImage(const QImage& image)
 {
-    m_image = image;
+    this->image = image;
     update();// 调用update将执行paintEvent函数
 }
 
@@ -289,8 +289,8 @@ void Streamer::on_RtmpPushAction_triggered()
 // 菜单栏开始推流按钮的槽函数
 void Streamer::on_StartButton_clicked()
 {
-    p_push->StartPush();
-    p_push->start();
+    _push->StartPush();
+    _push->start();
 
     Logger::LogMessage* log
         = new Logger::LogMessage
@@ -309,10 +309,10 @@ void Streamer::on_StartButton_clicked()
 // 菜单栏停止推流按钮的槽函数
 void Streamer::on_StopButton_clicked()
 {
-    p_push->StopPush();
+    _push->StopPush();
     // 当点击停止推流按钮后，执行exit函数线程不会立即停止，线程将会等到完全执行完毕才停止
-    p_push->exit();
-    p_push->wait();
+    _push->exit();
+    _push->wait();
 
     Logger::LogMessage* log
         = new Logger::LogMessage

@@ -23,7 +23,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 # 输出H264格式的视频，测试用
-DEFINES +=  OUT_FILE_H264
+#DEFINES +=  OUT_FILE_H264
 
 CONFIG  +=  c++11
 

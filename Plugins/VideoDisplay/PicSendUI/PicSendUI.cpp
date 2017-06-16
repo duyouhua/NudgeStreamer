@@ -25,16 +25,16 @@ namespace Display
     {
         setObjectName("PicSendUI");
 
-        p_frame_yuv = NULL;
-        p_frame_rgb = NULL;
-        img_convert_ctx = NULL;
+        _frame_yuv = NULL;
+        _frame_rgb = NULL;
+        _img_convert_ctx = NULL;
     }
 
     PicSendUI::~PicSendUI()
     {
-        sws_freeContext(img_convert_ctx);
-        av_free(p_frame_rgb);
-        av_free(p_frame_yuv);
+        sws_freeContext(_img_convert_ctx);
+        av_free(_frame_rgb);
+        av_free(_frame_yuv);
 
         Logger::LogMessage* log
             = new Logger::LogMessage
@@ -49,10 +49,10 @@ namespace Display
 
     bool PicSendUI::Initial()
     {
-        p_frame_rgb = av_frame_alloc();
-        p_frame_yuv = av_frame_alloc();
+        _frame_rgb = av_frame_alloc();
+        _frame_yuv = av_frame_alloc();
 
-        img_convert_ctx
+        _img_convert_ctx
             = sws_getContext
                 (
                 DEFAULT_WIDTH,
@@ -82,35 +82,35 @@ namespace Display
 
     void PicSendUI::run()
     {
-        while (m_shut_down)
+        while (shut_down)
         {
             if (DataBufferPointer::GetInstance().GetPicYUVData()->HaveData(ClassName()))
             {
                 std::shared_ptr<PicYUV> yuv_data = DataBufferPointer::GetInstance().GetPicYUVData()->PopTop(ClassName());
                 if (yuv_data->data)
                 {
-                    std::lock_guard<std::mutex> lock(m_mutex);
+                    std::lock_guard<std::mutex> lock(_mutex);
                     uint8_t* yuv_buff = (uint8_t*)av_malloc(avpicture_get_size(AV_PIX_FMT_YUV420P, DEFAULT_WIDTH, DEFAULT_HEIGHT));
-                    avpicture_fill((AVPicture*)p_frame_yuv, yuv_buff, AV_PIX_FMT_YUV420P, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+                    avpicture_fill((AVPicture*)_frame_yuv, yuv_buff, AV_PIX_FMT_YUV420P, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
                     uint8_t* out_buffer = (uint8_t*)av_malloc(avpicture_get_size(AV_PIX_FMT_RGB32, DEFAULT_WIDTH, DEFAULT_HEIGHT));
-                    avpicture_fill((AVPicture*)p_frame_rgb, out_buffer, AV_PIX_FMT_RGB32, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+                    avpicture_fill((AVPicture*)_frame_rgb, out_buffer, AV_PIX_FMT_RGB32, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
-                    p_frame_yuv->width = yuv_data->width;
-                    p_frame_yuv->height = yuv_data->height;
-                    p_frame_yuv->format = AV_PIX_FMT_YUV420P;
+                    _frame_yuv->width = yuv_data->width;
+                    _frame_yuv->height = yuv_data->height;
+                    _frame_yuv->format = AV_PIX_FMT_YUV420P;
 
                     for (int i = 0; i < PicYUV::NUM_DATA_POINTERS; ++i)
                     {
-                        p_frame_yuv->linesize[i] = yuv_data->linesize[i];
+                        _frame_yuv->linesize[i] = yuv_data->linesize[i];
                     }
 
                     int size = yuv_data->width * yuv_data->height;
-                    memcpy(p_frame_yuv->data[0], yuv_data->data[0], size);
-                    memcpy(p_frame_yuv->data[1], yuv_data->data[1], size / 4);
-                    memcpy(p_frame_yuv->data[2], yuv_data->data[2], size / 4);
+                    memcpy(_frame_yuv->data[0], yuv_data->data[0], size);
+                    memcpy(_frame_yuv->data[1], yuv_data->data[1], size / 4);
+                    memcpy(_frame_yuv->data[2], yuv_data->data[2], size / 4);
 
-                    sws_scale(img_convert_ctx, (uint8_t const * const *)p_frame_yuv->data, p_frame_yuv->linesize, 0, DEFAULT_HEIGHT, p_frame_rgb->data, p_frame_rgb->linesize);
+                    sws_scale(_img_convert_ctx, (uint8_t const * const *)_frame_yuv->data, _frame_yuv->linesize, 0, DEFAULT_HEIGHT, _frame_rgb->data, _frame_rgb->linesize);
 
                     // 把这个RGB数据 用QImage加载
                     QImage _temp_image((uchar*)out_buffer, DEFAULT_WIDTH, DEFAULT_HEIGHT, QImage::Format_RGB32);

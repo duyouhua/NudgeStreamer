@@ -1,4 +1,4 @@
-﻿/*
+/*
  * 持有所有消息队列的指针，这个类是个单例类，
  * 各个模块通过获取该对象的地址可以获取相应
  * 消息队列的指针，编写该类主要目的是防止客
@@ -39,22 +39,22 @@ public:
 
     DataBufferQueue<PicYUV>* GetPicYUVData()
     {
-        return p_yuv_buffer;
+        return _yuv_buffer;
     }
 
     DataBufferQueue<NetworkParament>* GetNetworkParam()
     {
-        return p_network_buffer;
+        return _network_buffer;
     }
 
     DataBufferQueue<Frame>* GetEncodeData()
     {
-        return p_encode_buffer;
+        return _encode_buffer;
     }
 
     DataBufferQueue<Logger::LogMessage>* GetLog()
     {
-        return p_log_buffer;
+        return _log_buffer;
     }
 
 private:
@@ -63,44 +63,44 @@ private:
 
     DataBufferPointer()
     {
-        p_yuv_buffer = new DataBufferQueue<PicYUV>;
-        p_network_buffer = new DataBufferQueue<NetworkParament>;
-        p_encode_buffer = new DataBufferQueue<Frame>;
-        p_log_buffer = new DataBufferQueue<Logger::LogMessage>;
+        _yuv_buffer = new DataBufferQueue<PicYUV>;
+        _network_buffer = new DataBufferQueue<NetworkParament>;
+        _encode_buffer = new DataBufferQueue<Frame>;
+        _log_buffer = new DataBufferQueue<Logger::LogMessage>;
     }
 
     ~DataBufferPointer()
     {
-        if (p_network_buffer)
+        if (_network_buffer)
         {
-            delete p_network_buffer;
-            p_network_buffer = NULL;
+            delete _network_buffer;
+            _network_buffer = NULL;
         }
 
-        if (p_yuv_buffer)
+        if (_yuv_buffer)
         {
-            delete p_yuv_buffer;
-            p_yuv_buffer = NULL;
+            delete _yuv_buffer;
+            _yuv_buffer = NULL;
         }
 
-        if (p_encode_buffer)
+        if (_encode_buffer)
         {
-            delete p_encode_buffer;
-            p_encode_buffer = NULL;
+            delete _encode_buffer;
+            _encode_buffer = NULL;
         }
 
-        if(p_log_buffer)
+        if(_log_buffer)
         {
-            delete p_log_buffer;
-            p_log_buffer = NULL;
+            delete _log_buffer;
+            _log_buffer = NULL;
         }
     }
 
 private:
-    DataBufferQueue<PicYUV>* p_yuv_buffer;
-    DataBufferQueue<Frame>* p_encode_buffer;
-    DataBufferQueue<Logger::LogMessage>* p_log_buffer;
-    DataBufferQueue<NetworkParament>* p_network_buffer;
+    DataBufferQueue<PicYUV>* _yuv_buffer;
+    DataBufferQueue<Frame>* _encode_buffer;
+    DataBufferQueue<Logger::LogMessage>* _log_buffer;
+    DataBufferQueue<NetworkParament>* _network_buffer;
 };
 
 #endif // _DATA_BUFFER_POINTER_H

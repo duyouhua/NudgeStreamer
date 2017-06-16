@@ -1,4 +1,4 @@
-﻿/*
+/*
  * 截屏的抽象类，提供了对应接口，截屏模块的
  * 实现都需要继承该抽象类
  */
@@ -12,14 +12,14 @@
 class InterceptScreen : public QThread
 {
 public:
-    InterceptScreen() : m_shut_down(true) {}
+    InterceptScreen() : shut_down(true) {}
 
 public:
     virtual bool Initial() = 0;
 
     void ShutDown()
     {
-        m_shut_down = false;
+        shut_down = false;
     }
 
 protected:
@@ -29,7 +29,7 @@ protected:
     }
 
 protected:
-    bool m_shut_down;
+    bool shut_down;
 };
 
 #endif // _INTERCEPT_SCREEN_H

@@ -10,7 +10,7 @@ namespace Encode
         DEFAULT_TIME(2000),
         DEFAULT_WIDTH(width),
         DEFAULT_HEIGHT(height),
-        m_current_encoder_id(1)
+        current_encoder_id(1)
     {
         setObjectName("AvEncode");
     }
@@ -62,14 +62,14 @@ namespace Encode
 
     void AvEncode::run()
     {
-        m_current_encoder_id = GetEncoderID();
-        AvEncoderPtr _encoder = EncodePool::GetInstance().GetCoder(m_current_encoder_id);
+        current_encoder_id = GetEncoderID();
+        AvEncoderPtr _encoder = EncodePool::GetInstance().GetCoder(current_encoder_id);
 
         QTime _time_count;
         int _time_sum = 0;
         _time_count.start();
 
-        while (m_shut_down)
+        while (shut_down)
         {
             _time_sum += _time_count.elapsed();
             _time_count.restart();
@@ -77,10 +77,10 @@ namespace Encode
             {
                 _time_sum = 0;
                 int id = GetEncoderID();
-                if (m_current_encoder_id != id)
+                if (current_encoder_id != id)
                 {
-                    m_current_encoder_id = id;
-                    _encoder = EncodePool::GetInstance().GetCoder(m_current_encoder_id);
+                    current_encoder_id = id;
+                    _encoder = EncodePool::GetInstance().GetCoder(current_encoder_id);
                 }
             }
             _encoder->StartEncode(ClassName());
