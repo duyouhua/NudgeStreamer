@@ -16,6 +16,7 @@ Homepage:https://github.com/Eric7Coding/NudgeStreamer
 ## 各文件夹简单介绍
 ### 中文 Chinese
 - bin：项目生成文件
+- Pic：存放关于项目的序列图、分层架构图以及数据流图等
 - lib：项目用到的第三方库的头文件以及库文件，lib下有各种非自行编译的第三方库的32位以及64位的库，默认为64位
 - Log：项目日志功能模块
 - Plugins：项目框架以及模块实现方式生成的库
