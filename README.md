@@ -31,16 +31,22 @@ Homepage:https://github.com/Eric7Coding/NudgeStreamer
 ![Sequence Diagram](https://raw.githubusercontent.com/Eric7Coding/NudgeStreamer/master/NudgeStreamer_Sequence_Diagram.png)
 
 ## 分层架构图 Layer Architecture
+### 中文 Chinese
 ![Layer Architecture](https://raw.githubusercontent.com/Eric7Coding/NudgeStreamer/master/NudgeStreamer_Layer_Architecture.png)
+
+### English
+![Layer Architecture Englis](https://raw.githubusercontent.com/Eric7Coding/NudgeStreamer/master/NudgeStreamer_Layer_Architecture_English.png)
 
 ## 数据流图 Data-Flow Graph
 ### 软件数据流图 NudgeStreamer Data-Flow Graph
 ![NudgeStreamer Data-Flow Graph](https://raw.githubusercontent.com/Eric7Coding/NudgeStreamer/master/NudgeStreamer_Data-Flow_Graph.png)
 
-### 异常数据流图 Parament Data-Flow Graph
-![Parament Data-Flow Graph](https://raw.githubusercontent.com/Eric7Coding/NudgeStreamer/master/Error_Data-Flow_Graph.png)
+### 异常或参数数据流图 Parament Data-Flow Graph
+![Parament Data-Flow Graph](https://raw.githubusercontent.com/Eric7Coding/NudgeStreamer/master/Parament_Data_Flow_Graph.png)
 
 ### 日志数据流图 Log Data-Flow Graph
 ![Log Data-Flow Graph](https://raw.githubusercontent.com/Eric7Coding/NudgeStreamer/master/Log_Data-Flow_Graph.png)
 
-## 
+## 主要实现思路
+### 中文 Chinese
+![]()
