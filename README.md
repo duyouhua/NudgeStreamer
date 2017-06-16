@@ -1,4 +1,4 @@
-# 桌面推流器
+# 桌面推流器 NudgeStreamer
 Homepage:https://github.com/Eric7Coding/NudgeStreamer
 
 ## 项目简单介绍
@@ -21,4 +21,5 @@ Homepage:https://github.com/Eric7Coding/NudgeStreamer
 - lib下第三方库某些库需要自行编译，如librtmp
 - 本程序非自行编译的第三方库均是64位的库，在32位环境下编译请将第三方库换成32位对应的库
 
-## 主要实现思路
+## 序列图
+![]()
