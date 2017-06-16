@@ -43,19 +43,19 @@ INCLUDEPATH +=  . \
 
 SOURCES +=  main.cpp \
             Streamer.cpp \
-            InterceptFactory.cpp \
-            NetworkFactory.cpp \
-            DisplayFactory.cpp \
-            EncodeFactory.cpp \
-            PushFactory.cpp
+            ./Factory/InterceptFactory.cpp \
+            ./Factory/NetworkFactory.cpp \
+            ./Factory/DisplayFactory.cpp \
+            ./Factory/EncodeFactory.cpp \
+            ./Factory/PushFactory.cpp
 
 HEADERS +=  Streamer.h \
             DataToUI.h \
-            InterceptFactory.h \
-            NetworkFactory.h \
-            DisplayFactory.h \
-            EncodeFactory.h \
-            PushFactory.h \
+            ./Factory/InterceptFactory.h \
+            ./Factory/NetworkFactory.h \
+            ./Factory/DisplayFactory.h \
+            ./Factory/EncodeFactory.h \
+            ./Factory/PushFactory.h \
             ./../Plugins/Frame.h \
             ./../Plugins/PicYUV.h \
             ./../Plugins/NetworkParament.h \

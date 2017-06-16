@@ -1,11 +1,11 @@
 #include "Logger.h"
 #include "Streamer.h"
 #include "ui_Streamer.h"
-#include "PushFactory.h"
-#include "EncodeFactory.h"
-#include "DisplayFactory.h"
-#include "NetworkFactory.h"
-#include "InterceptFactory.h"
+#include "Factory/PushFactory.h"
+#include "Factory/EncodeFactory.h"
+#include "Factory/DisplayFactory.h"
+#include "Factory/NetworkFactory.h"
+#include "Factory/InterceptFactory.h"
 
 #include <QPainter>
 #include <QDateTime>
