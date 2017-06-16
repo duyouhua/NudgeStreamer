@@ -49,4 +49,4 @@ Homepage:https://github.com/Eric7Coding/NudgeStreamer
 
 ## 主要实现思路
 ### 中文 Chinese
-![]()
+![Connection for UI and Logic Layer in Chinese](https://raw.githubusercontent.com/Eric7Coding/NudgeStreamer/master/Connection_for_UI_and_Logic_Layer_in_Chinese.png)
