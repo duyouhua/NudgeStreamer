@@ -37,8 +37,8 @@ Homepage:https://github.com/Eric7Coding/NudgeStreamer
 ### 软件数据流图 NudgeStreamer Data-Flow Graph
 ![NudgeStreamer Data-Flow Graph](https://raw.githubusercontent.com/Eric7Coding/NudgeStreamer/master/NudgeStreamer_Data-Flow_Graph.png)
 
-### 异常数据流图 Error Data-Flow Graph
-![Error Data-Flow Graph](https://raw.githubusercontent.com/Eric7Coding/NudgeStreamer/master/Error_Data-Flow_Graph.png)
+### 异常数据流图 Parament Data-Flow Graph
+![Parament Data-Flow Graph](https://raw.githubusercontent.com/Eric7Coding/NudgeStreamer/master/Error_Data-Flow_Graph.png)
 
 ### 日志数据流图 Log Data-Flow Graph
 ![Log Data-Flow Graph](https://raw.githubusercontent.com/Eric7Coding/NudgeStreamer/master/Log_Data-Flow_Graph.png)
