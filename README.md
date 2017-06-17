@@ -153,10 +153,10 @@ string ClassName，获得类名
 该模块主要运用librtmp库来进行H264格式数据的推流，当系统软件初始化的时候，该模块并不会启动线程，而当用户点击“开始推流”按钮时，isPush变量将会变为true，此时将会启动线程进行推流，当用户点击“停止推流”时，isPush变量将会变为false，线程将会调用exit()，此时线程不会立即停止，而是等到完全执行完run函数才会停止
 
 ### Log
-Log 单例类 继承QThread 线程类
-成员：bool shut_down  控制线程的变量
-QFile _file_log  打开关闭日志文件
-string class_name  类名
+Log 单例类 继承QThread 线程类		
+成员：bool shut_down  控制线程的变量		
+QFile _file_log  打开关闭日志文件		
+string class_name  类名		
 
 方法
 构造函数中将会向消息队列进行注册该模块是LogMessage数据的消费者
@@ -167,16 +167,16 @@ string ClassName 获得类名
 命名空间Logger中的Log类，是个线程类，在客户端初始化时就会对该线程进行初始化，初始化时就会打开日志文件，并一直保持开着的状态，其他模块需要写日志时会将日志信息存入LogMessage结构体中，并放入消息队列，该线程类会在一段时间内从消息队列中获取日志信息并写入日志文件，当客户端关闭时，将会关闭日志文件。
 
 #### enum LogLevel
-LogLevel  枚举 日志等级信息
-成员主要有
-INFO
-WARNING
-ERRORINFO
-三种日志等级
+LogLevel  枚举 日志等级信息	
+成员主要有	
+INFO	
+WARNING	
+ERRORINFO	
+三种日志等级	
 
 #### struct LogMessage
-LogMessage 结构体 存储日志信息
-成员主要有日志等级、类名、日志信息、时间
+LogMessage 结构体 存储日志信息		
+成员主要有日志等级、类名、日志信息、时间	
 
 ### 消息队列
 #### DataBufferQueue
@@ -193,10 +193,10 @@ shared_ptr<T> PopTop(string) 根据string先在map中找到消费者的队列，
 DataBufferPointer 单例类
 将DataBufferQueue需要存放的三种数据结构的对象指针封装在该类中，模块每次访问都只能从该类中获取到对应数据消息队列的指针来进行数据的访问；利用单例模式设计保证了对象的唯一性
 
-成员：DataBufferQueue<Frame>*
-DataBufferQueue<PicYUV>*
-DataBufferQueue<NetworkParament>*
-DataBufferQueue<Logger::LogMessage>*
+成员：DataBufferQueue<Frame>*	
+DataBufferQueue<PicYUV>*	
+DataBufferQueue<NetworkParament>*	
+DataBufferQueue<Logger::LogMessage>*	
 公有方法主要有获取该类的地址，获取四种数据消息队列的指针；
 私有方法主要有构造函数和析构函数，构造函数是对四个成员变量进行初始化，析构函数是对四个指针的内存进行释放
 
@@ -209,9 +209,9 @@ DataToUI  中间件  单例类  每个模块与UI线程的通信类
 主要用于给每个模块发送信息到界面层
 
 自定义信号；
-void sendImage(QImage)
-void sendError(QString)
-void sendJitter(NetworkParament)
+void sendImage(QImage)	
+void sendError(QString)	
+void sendJitter(NetworkParament)	
 
 公有方法
 void setParament(QString)  模块传入错误信息，由该类发送sendError信号到界面层处理 
